@@ -45,3 +45,63 @@ function renderTasks(tasks){
         `;
     });
 }
+
+async function toggleTask(id){
+
+    const data =
+    await getTasks();
+
+    const task =
+    data.tasks.find(
+        x=>x.id===id
+    );
+
+    task.done = !task.done;
+
+    await saveTasks(data);
+
+    renderTasks(data.tasks);
+}
+
+async function deleteTask(id){
+
+    const data =
+    await getTasks();
+
+    data.tasks =
+    data.tasks.filter(
+        x=>x.id!==id
+    );
+
+    await saveTasks(data);
+
+    renderTasks(data.tasks);
+}
+
+async function addTask(){
+
+    const data =
+    await getTasks();
+
+    data.tasks.push({
+
+        id:Date.now(),
+
+        title:
+        document.getElementById(
+        "taskInput").value,
+
+        deadline:
+        document.getElementById(
+        "deadlineInput").value,
+
+        done:false,
+
+        createdAt:
+        new Date().toISOString()
+    });
+
+    await saveTasks(data);
+
+    renderTasks(data.tasks);
+}
