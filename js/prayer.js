@@ -9,13 +9,13 @@ async function loadPrayer() {
             const lon =
                 position.coords.longitude;
 
-            const result =
+            const response =
                 await fetch(
                     `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=11`
                 );
 
             const data =
-                await result.json();
+                await response.json();
 
             const t =
                 data.data.timings;
@@ -32,3 +32,8 @@ async function loadPrayer() {
         }
     );
 }
+
+window.addEventListener(
+    "DOMContentLoaded",
+    () => loadPrayer()
+);
