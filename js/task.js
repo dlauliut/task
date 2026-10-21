@@ -4,47 +4,25 @@ async function getTasks() {
         `https://api.github.com/gists/${CONFIG.gistId}`
     );
 
-    if (!response.ok) {
-        throw new Error(
-            `HTTP Error ${response.status}`
-        );
-    }
-
     const gist = await response.json();
-
-    if (!gist.files["task.json"]) {
-        throw new Error(
-            "File task.json tidak ditemukan di Gist"
-        );
-    }
 
     return JSON.parse(
         gist.files["task.json"].content
     );
-
 }
 
 function renderTasks(tasks) {
 
-    const list =
-        document.getElementById("taskList");
-
-    if (!list) {
-        console.error(
-            "Element #taskList tidak ditemukan"
-        );
-        return;
-    }
+    const list = document.getElementById(
+        "taskList"
+    );
 
     list.innerHTML = "";
 
-    if (!tasks || tasks.length === 0) {
+    if (!tasks.length) {
 
-        list.innerHTML = `
-            <div class="empty-task">
-                Belum ada task
-            </div>
-        `;
+        list.innerHTML =
+            "<p>Tidak ada task.</p>";
 
         return;
     }
@@ -52,76 +30,57 @@ function renderTasks(tasks) {
     tasks.forEach(task => {
 
         list.innerHTML += `
-            <div class="task-item">
 
-                <div class="task-left">
+        <div class="task-item">
 
-                    <input
-                        type="checkbox"
-                        ${task.done ? "checked" : ""}
-                        disabled>
+            <div class="task-left">
 
-                    <div>
+                <input
+                    type="checkbox"
+                    ${task.done ? "checked" : ""}
+                    disabled>
 
-                        <div class="
-                            task-title
-                            ${task.done ? "done" : ""}
-                        ">
-                            ${task.title}
-                        </div>
+                <div>
 
-                        <div class="deadline">
-                            📅 Deadline:
-                            ${task.deadline || "-"}
-                        </div>
+                    <div class="task-title ${task.done ? "done" : ""}">
+                        ${task.title}
+                    </div>
 
+                    <div class="deadline">
+                        📅 ${task.deadline || "-"}
                     </div>
 
                 </div>
 
             </div>
+
+        </div>
+
         `;
-
     });
-
 }
 
-window.onload = async function () {
+window.addEventListener(
+    "DOMContentLoaded",
+    async () => {
 
-    try {
+        try {
 
-        const data =
-            await getTasks();
+            const data =
+                await getTasks();
 
-        console.log(
-            "Task Loaded:",
-            data
-        );
+            renderTasks(data.tasks);
 
-        renderTasks(
-            data.tasks
-        );
+        } catch (err) {
 
-        if (
-            typeof loadPrayer ===
-            "function"
-        ) {
-            loadPrayer();
+            console.error(err);
+
+            document.getElementById(
+                "taskList"
+            ).innerHTML =
+                "Gagal membaca task.";
+
         }
 
     }
-    catch (err) {
-
-        console.error(err);
-
-        document.getElementById(
-            "taskList"
-        ).innerHTML = `
-            <div style="color:red">
-                Gagal membaca task dari Gist
-            </div>
-        `;
-
-    }
-
-};
+);
