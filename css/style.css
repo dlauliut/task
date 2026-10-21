@@ -1,74 +1,97 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+body{
+    margin:0;
+    font-family:Segoe UI;
+    background:#f4f6f9;
 }
 
-body {
-    font-family: Segoe UI, Arial, sans-serif;
-    background: #f5f7fb;
-    color: #333;
+header{
+    background:#2563eb;
+    color:white;
+    padding:20px;
 }
 
-header {
-    background: #1677ff;
-    color: white;
-    padding: 16px;
+.container{
+    max-width:1000px;
+    margin:30px auto;
+    padding:0 20px;
 }
 
-header h1 {
-    font-size: 24px;
-}
-
-nav {
-    display: flex;
-    gap: 10px;
-    padding: 15px;
-    background: white;
-    border-bottom: 1px solid #ddd;
-}
-
-nav button {
-    padding: 10px 16px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    background: #1677ff;
-    color: white;
-}
-
-nav button:hover {
-    background: #0958d9;
-}
-
-main {
-    padding: 20px;
-}
-
-.card {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
+.card{
+    background:white;
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:20px;
     box-shadow:
-        0 2px 8px rgba(0,0,0,0.08);
+    0 2px 10px rgba(0,0,0,.08);
 }
 
-input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+.task-form{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
 }
 
-ul {
-    margin-top: 15px;
+.task-form input{
+    padding:10px;
+    border:1px solid #ddd;
+    border-radius:8px;
 }
 
-li {
-    padding: 8px;
-    border-bottom: 1px solid #eee;
+#taskInput{
+    flex:1;
 }
 
-.hidden {
-    display: none;
+.task-form button{
+    border:none;
+    background:#2563eb;
+    color:white;
+    padding:10px 20px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.task-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:15px;
+    border-bottom:1px solid #eee;
+}
+
+.task-left{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+}
+
+.task-title{
+    font-size:16px;
+}
+
+.done{
+    text-decoration:line-through;
+    color:#888;
+}
+
+.deadline{
+    font-size:12px;
+    color:#777;
+    margin-top:3px;
+}
+
+.delete-btn{
+    border:none;
+    background:none;
+    cursor:pointer;
+    font-size:18px;
+}
+
+.prayer-widget{
+    max-width:350px;
+}
+
+.widget-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
