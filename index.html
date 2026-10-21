@@ -1,94 +1,48 @@
-<!DOCTYPE html>
-<html lang="id">
+<header>
+    <h1>My Dashboard</h1>
+</header>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Dashboard</title>
+<div class="container">
 
-    <link rel="stylesheet" href="css/style.css">
+    <div class="card">
 
-    <script src="config.js"></script>
-    <script src="js/task.js"></script>
-    <script src="js/prayer.js"></script>
-</head>
+        <h2>Task List</h2>
 
-<body>
+        <div class="task-form">
 
-    <header>
-        <h1>My Dashboard</h1>
-    </header>
+            <input
+                id="taskInput"
+                type="text"
+                placeholder="Tambah task">
 
-    <nav>
-        <button onclick="showPage('task')">📋 Task</button>
-        <button onclick="showPage('prayer')">🕌 Prayer</button>
-    </nav>
+            <input
+                id="deadlineInput"
+                type="date">
 
-    <main>
+            <button onclick="addTask()">
+                Tambah
+            </button>
 
-        <section id="taskPage" class="page">
+        </div>
 
-            <div class="card">
-                <h2>Task List</h2>
+        <div id="taskList"></div>
 
-                <input type="text"
-                    id="taskInput"
-                    placeholder="Tambah task">
+    </div>
 
-                <button onclick="addTask()">
-                    Simpan
-                </button>
+    <div class="card prayer-widget">
 
-                <ul id="taskList"></ul>
+        <div class="widget-header">
 
-            </div>
-        </section>
+            <h3>🕌 Jadwal Adzan</h3>
 
-        <section id="prayerPage" class="page hidden">
+            <button onclick="loadPrayer()">
+                Refresh
+            </button>
 
-            <div class="card">
+        </div>
 
-                <h2>Jadwal Adzan</h2>
+        <div id="prayerResult"></div>
 
-                <button onclick="loadPrayer()">
-                    Ambil Lokasi
-                </button>
+    </div>
 
-                <div id="prayerResult"></div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-    <script>
-
-        function showPage(page) {
-
-            document
-                .getElementById("taskPage")
-                .classList.add("hidden");
-
-            document
-                .getElementById("prayerPage")
-                .classList.add("hidden");
-
-            if (page === "task") {
-                document
-                    .getElementById("taskPage")
-                    .classList.remove("hidden");
-            }
-
-            if (page === "prayer") {
-                document
-                    .getElementById("prayerPage")
-                    .classList.remove("hidden");
-            }
-        }
-
-    </script>
-
-</body>
-
-</html>
+</div>
