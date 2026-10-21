@@ -1,48 +1,57 @@
-<header>
-    <h1>My Dashboard</h1>
-</header>
+<!DOCTYPE html>
+<html lang="id">
 
-<div class="container">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <div class="card">
+    <title>My Dashboard</title>
 
-        <h2>Task List</h2>
+    <link rel="stylesheet" href="css/style.css">
 
-        <div class="task-form">
+    <script src="config.js"></script>
+    <script src="js/task.js" defer></script>
+    <script src="js/prayer.js" defer></script>
+</head>
 
-            <input
-                id="taskInput"
-                type="text"
-                placeholder="Tambah task">
+<body>
 
-            <input
-                id="deadlineInput"
-                type="date">
+    <header>
+        <h1>My Dashboard</h1>
+    </header>
 
-            <button onclick="addTask()">
-                Tambah
-            </button>
+    <div class="container">
 
-        </div>
+        <div class="card">
 
-        <div id="taskList"></div>
+            <h2>Task List</h2>
 
-    </div>
-
-    <div class="card prayer-widget">
-
-        <div class="widget-header">
-
-            <h3>🕌 Jadwal Adzan</h3>
-
-            <button onclick="loadPrayer()">
-                Refresh
-            </button>
+            <div id="taskList">
+                Loading...
+            </div>
 
         </div>
 
-        <div id="prayerResult"></div>
+        <div class="card prayer-widget">
+
+            <div class="widget-header">
+
+                <h3>🕌 Jadwal Adzan</h3>
+
+                <button onclick="loadPrayer()">
+                    Refresh
+                </button>
+
+            </div>
+
+            <div id="prayerResult">
+                Loading...
+            </div>
+
+        </div>
 
     </div>
 
-</div>
+</body>
+
+</html>
