@@ -47,7 +47,7 @@ function renderTasks(tasks) {
                     </div>
 
                     <div class="deadline">
-                        📅 ${task.deadline || "-"}
+                        ⏳ Deadline: ${task.deadline || "-"}
                     </div>
 
                 </div>
