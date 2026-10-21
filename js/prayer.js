@@ -23,11 +23,36 @@ async function loadPrayer() {
             document.getElementById(
                 "prayerResult"
             ).innerHTML = `
-                <p>Subuh : ${t.Fajr}</p>
-                <p>Dzuhur : ${t.Dhuhr}</p>
-                <p>Ashar : ${t.Asr}</p>
-                <p>Maghrib : ${t.Maghrib}</p>
-                <p>Isya : ${t.Isha}</p>
+            
+            <div class="prayer-table">
+            
+                <div class="prayer-row">
+                    <span class="prayer-name">Subuh</span>
+                    <span class="prayer-time">${t.Fajr}</span>
+                </div>
+            
+                <div class="prayer-row">
+                    <span class="prayer-name">Dzuhur</span>
+                    <span class="prayer-time">${t.Dhuhr}</span>
+                </div>
+            
+                <div class="prayer-row">
+                    <span class="prayer-name">Ashar</span>
+                    <span class="prayer-time">${t.Asr}</span>
+                </div>
+            
+                <div class="prayer-row">
+                    <span class="prayer-name">Maghrib</span>
+                    <span class="prayer-time">${t.Maghrib}</span>
+                </div>
+            
+                <div class="prayer-row">
+                    <span class="prayer-name">Isya</span>
+                    <span class="prayer-time">${t.Isha}</span>
+                </div>
+            
+            </div>
+            
             `;
         }
     );
