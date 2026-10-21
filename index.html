@@ -1,57 +1,26 @@
-<!DOCTYPE html>
-<html lang="id">
+<div class="container">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <div class="card">
+        <h2>📋 Task List</h2>
 
-    <title>My Dashboard</title>
+        <div id="taskList">
+            Loading...
+        </div>
+    </div>
 
-    <link rel="stylesheet" href="css/style.css">
+    <div class="card prayer-widget">
 
-    <script src="config.js"></script>
-    <script src="js/task.js" defer></script>
-    <script src="js/prayer.js" defer></script>
-</head>
-
-<body>
-
-    <header>
-        <h1>My Dashboard</h1>
-    </header>
-
-    <div class="container">
-
-        <div class="card">
-
-            <h2>Task List</h2>
-
-            <div id="taskList">
-                Loading...
-            </div>
-
+        <div class="widget-header">
+            <h3>🕌 Jadwal Adzan</h3>
+            <button onclick="loadPrayer()">
+                Refresh
+            </button>
         </div>
 
-        <div class="card prayer-widget">
-
-            <div class="widget-header">
-
-                <h3>🕌 Jadwal Adzan</h3>
-
-                <button onclick="loadPrayer()">
-                    Refresh
-                </button>
-
-            </div>
-
-            <div id="prayerResult">
-                Loading...
-            </div>
-
+        <div id="prayerResult">
+            Loading...
         </div>
 
     </div>
 
-</body>
-
-</html>
+</div>
