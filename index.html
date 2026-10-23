@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#10131b">
+    <meta name="description" content="Dashboard sederhana untuk mengatur tugas dan melihat jadwal salat harian.">
+    <title>Ruang Kerja — Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="config.js" defer></script>
+    <script src="js/task.js" defer></script>
+    <script src="js/planner.js" defer></script>
+    <script src="js/bills.js" defer></script>
+    <script src="js/prayer.js" defer></script>
+</head>
+<body>
+    <div class="app-shell">
+        <header class="topbar">
+            <a class="brand" href="#" aria-label="Ruang Kerja, beranda">
+                <span class="brand-mark" aria-hidden="true">r</span>
+                <span>ruang<span class="brand-light">kerja</span></span>
+            </a>
+            <div class="topbar-note">
+                <span class="status-dot" aria-hidden="true"></span>
+                <span>Ruang produktifmu</span>
+            </div>
+        </header>
+
+        <main class="dashboard">
+            <section class="welcome">
+                <div>
+                    <p class="eyebrow" id="todayLabel">HARI INI</p>
+                    <h1>Selamat datang kembali<span class="welcome-period">.</span></h1>
+                    <p class="welcome-copy">Satu langkah kecil hari ini, satu kemajuan besar nanti.</p>
+                </div>
+                <div class="welcome-decoration" aria-hidden="true">
+                    <span class="sun-shape"></span>
+                    <span class="decoration-line"></span>
+                </div>
+            </section>
+
+            <div class="dashboard-grid">
+                <section class="card task-card" aria-labelledby="taskHeading">
+                    <div class="section-heading">
+                        <div>
+                            <p class="eyebrow">DAFTAR KERJA</p>
+                            <h2 id="taskHeading">Task kamu</h2>
+                        </div>
+                        <button class="primary-button" id="addTaskButton" type="button">
+                            <span class="button-icon" aria-hidden="true">+</span>
+                            <span>Tambah task</span>
+                        </button>
+                    </div>
+                    <div class="task-summary" id="taskSummary" aria-live="polite">Memuat task…</div>
+                    <div class="task-list" id="taskList" aria-live="polite" aria-busy="true">
+                        <div class="loading-state">
+                            <span class="loading-spinner" aria-hidden="true"></span>
+                            <span>Menyiapkan daftar task…</span>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="sidebar-stack">
+                    <aside class="card prayer-card" aria-labelledby="prayerHeading">
+                        <div class="section-heading prayer-heading">
+                            <div>
+                                <p class="eyebrow">PENGINGAT HARIAN</p>
+                                <h2 id="prayerHeading">Jadwal salat</h2>
+                            </div>
+                            <button class="icon-button" id="refreshPrayerButton" type="button" aria-label="Muat ulang jadwal salat" title="Muat ulang">
+                                <span aria-hidden="true">↻</span>
+                            </button>
+                        </div>
+                        <div id="prayerResult" aria-live="polite" aria-busy="true">
+                            <div class="loading-state compact">
+                                <span class="loading-spinner" aria-hidden="true"></span>
+                                <span>Mencari jadwal…</span>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <section class="card agenda-card" aria-labelledby="agendaHeading">
+                        <div class="section-heading">
+                            <div>
+                                <p class="eyebrow">HARI INI</p>
+                                <h2 id="agendaHeading">Jadwal saya</h2>
+                            </div>
+                            <button class="panel-add-button" id="addAgendaButton" type="button" aria-label="Tambah jadwal hari ini">+</button>
+                        </div>
+                        <div class="panel-list" id="agendaList" aria-live="polite" aria-busy="true">
+                            <div class="loading-state compact">
+                                <span class="loading-spinner" aria-hidden="true"></span>
+                                <span>Memuat jadwal…</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="card bills-card" aria-labelledby="billsHeading">
+                        <div class="section-heading">
+                            <div>
+                                <p class="eyebrow">KEUANGAN</p>
+                                <h2 id="billsHeading">Daftar bayar</h2>
+                            </div>
+                            <button class="panel-add-button" id="addBillButton" type="button" aria-label="Tambah daftar bayar">+</button>
+                        </div>
+                        <div class="period-tabs" role="tablist" aria-label="Periode daftar bayar">
+                            <button class="period-tab active" id="monthlyTab" type="button" role="tab" aria-selected="true" data-period="monthly">Bulanan</button>
+                            <button class="period-tab" id="yearlyTab" type="button" role="tab" aria-selected="false" data-period="yearly">Tahunan</button>
+                        </div>
+                        <div class="panel-list bill-list" id="billList" aria-live="polite" aria-busy="true">
+                            <div class="loading-state compact">
+                                <span class="loading-spinner" aria-hidden="true"></span>
+                                <span>Memuat daftar…</span>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <footer class="footer-note">Dibuat untuk hari yang lebih teratur <span aria-hidden="true">✳</span></footer>
+        </main>
+    </div>
+
+    <div class="modal hidden" id="taskModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+        <button class="modal-backdrop" type="button" data-close-modal aria-label="Tutup dialog"></button>
+        <form class="modal-content" id="taskForm">
+            <div class="modal-header">
+                <div>
+                    <p class="eyebrow">DAFTAR KERJA</p>
+                    <h2 id="modalTitle">Tambah task</h2>
+                </div>
+                <button class="icon-button close-button" type="button" data-close-modal aria-label="Tutup dialog">×</button>
+            </div>
+            <label class="field-label" for="taskTitle">Nama task</label>
+            <input type="text" id="taskTitle" name="title" placeholder="Contoh: Selesaikan laporan" maxlength="200" required>
+            <label class="field-label" for="taskDeadline">Tenggat waktu <span>(opsional)</span></label>
+            <input type="date" id="taskDeadline" name="deadline">
+            <p class="form-feedback" id="formFeedback" role="status"></p>
+            <div class="modal-actions">
+                <button class="secondary-button" type="button" data-close-modal>Batal</button>
+                <button class="primary-button" id="saveButton" type="submit">Simpan task</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal hidden" id="plannerModal" role="dialog" aria-modal="true" aria-labelledby="plannerModalTitle" aria-hidden="true">
+        <button class="modal-backdrop" type="button" data-close-planner aria-label="Tutup dialog"></button>
+        <form class="modal-content" id="plannerForm">
+            <div class="modal-header">
+                <div>
+                    <p class="eyebrow" id="plannerModalEyebrow">JADWAL MINGGUAN</p>
+                    <h2 id="plannerModalTitle">Tambah jadwal</h2>
+                </div>
+                <button class="icon-button close-button" type="button" data-close-planner aria-label="Tutup dialog">×</button>
+            </div>
+            <label class="field-label" for="plannerName">Nama</label>
+            <input type="text" id="plannerName" name="title" placeholder="Contoh: Bekerja" maxlength="120" required>
+            <label class="field-label" for="plannerDay">Hari</label>
+            <select id="plannerDay" name="day_of_week">
+                <option value="1">Senin</option>
+                <option value="2">Selasa</option>
+                <option value="3">Rabu</option>
+                <option value="4">Kamis</option>
+                <option value="5">Jumat</option>
+                <option value="6">Sabtu</option>
+                <option value="7">Minggu</option>
+            </select>
+            <div class="time-range-fields">
+                <div>
+                    <label class="field-label" for="plannerStartTime">Mulai</label>
+                    <input type="time" id="plannerStartTime" name="start_time" required>
+                </div>
+                <div>
+                    <label class="field-label" for="plannerFinishTime">Selesai</label>
+                    <input type="time" id="plannerFinishTime" name="finish_time" required>
+                </div>
+            </div>
+            <p class="form-feedback" id="plannerFeedback" role="status"></p>
+            <div class="modal-actions">
+                <button class="secondary-button" type="button" data-close-planner>Batal</button>
+                <button class="primary-button" id="plannerSaveButton" type="submit">Simpan</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal hidden" id="billsModal" role="dialog" aria-modal="true" aria-labelledby="billsModalTitle" aria-hidden="true">
+        <button class="modal-backdrop" type="button" data-close-bills aria-label="Tutup dialog"></button>
+        <form class="modal-content" id="billsForm">
+            <div class="modal-header">
+                <div>
+                    <p class="eyebrow">DAFTAR BAYAR</p>
+                    <h2 id="billsModalTitle">Tambah daftar bayar</h2>
+                </div>
+                <button class="icon-button close-button" type="button" data-close-bills aria-label="Tutup dialog">×</button>
+            </div>
+            <label class="field-label" for="billTitle">Nama pembayaran</label>
+            <input type="text" id="billTitle" name="title" placeholder="Contoh: Tagihan internet" maxlength="120" required>
+            <label class="field-label" for="billPeriod">Periode</label>
+            <select id="billPeriod" name="period_type">
+                <option value="Monthly">Bulanan</option>
+                <option value="Yearly">Tahunan</option>
+            </select>
+            <label class="field-label" for="billDueDay">Tanggal jatuh tempo</label>
+            <div class="due-date-fields">
+                <input type="number" id="billDueDay" name="due_day" min="1" max="31" placeholder="Tanggal (1–31)" required>
+                <div class="due-month-field">
+                    <label class="visually-hidden" for="billDueMonth">Bulan jatuh tempo</label>
+                    <select id="billDueMonth" name="due_month">
+                        <option value="1">Jan</option>
+                        <option value="2">Feb</option>
+                        <option value="3">Mar</option>
+                        <option value="4">Apr</option>
+                        <option value="5">Mei</option>
+                        <option value="6">Jun</option>
+                        <option value="7">Jul</option>
+                        <option value="8">Agu</option>
+                        <option value="9">Sep</option>
+                        <option value="10">Okt</option>
+                        <option value="11">Nov</option>
+                        <option value="12">Des</option>
+                    </select>
+                </div>
+            </div>
+            <p class="form-feedback" id="billsFeedback" role="status"></p>
+            <div class="modal-actions">
+                <button class="secondary-button" type="button" data-close-bills>Batal</button>
+                <button class="primary-button" id="billsSaveButton" type="submit">Simpan</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
