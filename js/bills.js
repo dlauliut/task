@@ -49,12 +49,14 @@ async function loadBills() {
     try {
         const { data, error } = await billsClient
             .from("bills")
-            .select("id, title, period_type, is_paid, due_day, due_month")
+            .select("id, title, period_type, is_paid, due_day, due_month, last_paid")
             .eq("period_type", activeBillPeriod)
-            .order("created_at", { ascending: false });
+            .order("due_month", { ascending: true, nullsFirst: false })
+            .order("due_day", { ascending: true });
 
         if (error) throw error;
         billItems = data || [];
+        await resetExpiredPaidBills();
         renderBills();
     } catch (error) {
         console.error("Gagal memuat daftar bayar:", error);
@@ -62,6 +64,47 @@ async function loadBills() {
             ? "Tabel bills belum tersedia di Supabase."
             : error.message || "Daftar bayar gagal dimuat.");
     }
+}
+
+function getTodayDateString() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+}
+
+function wasPaidInCurrentPeriod(bill) {
+    if (!bill.last_paid) return false;
+    const lastPaid = String(bill.last_paid).slice(0, 10);
+    const today = getTodayDateString();
+
+    if (bill.period_type === "Monthly") {
+        return lastPaid.slice(0, 7) === today.slice(0, 7);
+    }
+    if (bill.period_type === "Yearly") {
+        return lastPaid.slice(0, 4) === today.slice(0, 4);
+    }
+    return false;
+}
+
+async function resetExpiredPaidBills() {
+    const expiredIds = billItems
+        .filter((bill) => bill.is_paid && !wasPaidInCurrentPeriod(bill))
+        .map((bill) => bill.id);
+
+    if (!expiredIds.length) return;
+
+    const { error } = await billsClient
+        .from("bills")
+        .update({ is_paid: false })
+        .in("id", expiredIds);
+    if (error) throw error;
+
+    const expiredSet = new Set(expiredIds.map(String));
+    billItems.forEach((bill) => {
+        if (expiredSet.has(String(bill.id))) bill.is_paid = false;
+    });
 }
 
 function renderBills() {
@@ -233,9 +276,12 @@ async function saveBill(event) {
 
 async function setBillPaid(id, isPaid) {
     try {
+        const update = { is_paid: isPaid };
+        if (isPaid) update.last_paid = getTodayDateString();
+
         const { error } = await billsClient
             .from("bills")
-            .update({ is_paid: isPaid })
+            .update(update)
             .eq("id", id);
         if (error) throw error;
         await loadBills();
